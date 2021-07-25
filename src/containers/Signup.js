@@ -64,14 +64,14 @@ const Signup = ({signup, isAuthenticated}) => {
         first_name:'',
         last_name:'',
         email:'',
-        // phone:'',
-        // country:'',
-        // category:'',
+        phone:'',
+        country:'',
+        category:'',
         password:'',
         re_password:'',
     });
 
-    const {first_name,last_name,email,password,re_password} = formData;
+    const {first_name,last_name,phone,country,category,email,password,re_password} = formData;
 
     const onChange = e => setFormData({ ...formData,[e.target.name]: e.target.value});
 
@@ -92,17 +92,16 @@ const Signup = ({signup, isAuthenticated}) => {
         }
         
         if((password == re_password) && (password.length>8)){
-            signup(first_name,last_name,email,password,re_password);
+            signup(first_name,last_name,phone,country,category,email,password,re_password);
             setAccontCreated(true);
         }
     };
 
-    const continueWithGoogle = async () => {
-        try {
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${process.env.REACT_APP_API_URL}`)
-
+    const continueWithGoogle = async() => {
+        try{
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:8000`)
             window.location.replace(res.data.authorization_url);
-        } catch (err) {
+        } catch(err){
 
         }
     };
@@ -193,7 +192,7 @@ const Signup = ({signup, isAuthenticated}) => {
                                 onChange={ e => onChange(e)}
                             />
                         </Grid>
-                        {/* <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={6}>
                             <TextField
                                 className="inputcolor"
                                 autoComplete="phone"
@@ -255,7 +254,7 @@ const Signup = ({signup, isAuthenticated}) => {
                                 }}
                                 onChange={ e => onChange(e)}
                             />
-                        </Grid> */}
+                        </Grid>
                         <Grid item xs={12}>
                             <TextField
                                 className="inputcolor"
@@ -290,7 +289,7 @@ const Signup = ({signup, isAuthenticated}) => {
                             />
                             
                         </Grid>
-                        <div className="passvalidation">
+                        {/* <div className="passvalidation">
                             <p id="capital" className="mt-2 mb-2">
                                 <Check className="iconsize checkk icon"/>
                                 <Clear className="iconsize clearr icon"/>
@@ -311,7 +310,7 @@ const Signup = ({signup, isAuthenticated}) => {
                                 <Clear className="iconsize clearr icon"/>
                                 <span className="size">8+ Characters</span>
                             </p>
-                        </div>
+                        </div> */}
                         <Grid item xs={12}>
                             <TextField
                                 className="inputcolor"

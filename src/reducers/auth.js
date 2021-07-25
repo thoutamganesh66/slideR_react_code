@@ -62,6 +62,13 @@ export default function(state = initialState, action){
                 ...state,
                 user: null
             }
+        case GOOGLE_AUTH_SUCCESS:
+            return{
+                ...state,
+                isAuthenticated:true,
+                access:payload.access,
+                refresh:payload.refresh
+            }
         case GOOGLE_AUTH_FAIL:
         case LOGIN_FAIL:
         case SIGNUP_FAIL:

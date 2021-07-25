@@ -16,7 +16,7 @@ const Home = () => (
                     </div>
                     <div class="btn-group-vertical box">
                     <Link to="/login" className="btn btn-dark mb-3 radius">Get Started</Link>        
-                    <button type="button" className="btn btn-light radius">Upload Slides</button>
+                    <Link to="/upload" className="btn btn-light radius">Upload Slides</Link>
                     </div>
                 </div>
                 <div className="col-sm person">

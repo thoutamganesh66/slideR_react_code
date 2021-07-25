@@ -38,7 +38,7 @@ const Navbar = ({logout, isAuthenticated}) => {
                         </div>
                     </div>
                 </nav>
-                {redirect ? <Redirect to='/' /> : <> </>}
+                {redirect ? <Redirect to='/home' /> : <> </>}
             </div>
         </>
     );

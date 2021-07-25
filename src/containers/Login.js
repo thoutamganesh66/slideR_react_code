@@ -61,7 +61,7 @@ const Login = ({login, isAuthenticated}) => {
 
     const continueWithGoogle = async() => {
         try{
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${process.env.REACT_APP_API_URL}`)
+            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:8000`)
             window.location.replace(res.data.authorization_url);
         } catch(err){
 
