@@ -188,6 +188,9 @@ export const verify = (uid,token) => async dispatch => {
     }
 }
 
+export const upload = () => async dispatch => {
+    
+}
 export const reset_password = (email) => async dispatch =>{
     const config ={
         headers: {

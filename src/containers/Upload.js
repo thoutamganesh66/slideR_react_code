@@ -10,6 +10,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import InputLabel from '@material-ui/core/InputLabel';
 import axios from 'axios';
+import { Redirect } from 'react-router-dom';
+
+import Checkbox from "@material-ui/core/Checkbox";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const useStyles = makeStyles((theme) => ({
     submit: {
@@ -21,16 +26,57 @@ const useStyles = makeStyles((theme) => ({
 	  },
 	  selectEmpty: {
 		marginTop: theme.spacing(2),
+	  },
+	  indeterminateColor: {
+		color: "#f50057"
+	  },
+	  selectAllText: {
+		fontWeight: 500
+	  },
+	  selectedAll: {
+		backgroundColor: "rgba(0, 0, 0, 0.08)",
+		"&:hover": {
+		  backgroundColor: "rgba(0, 0, 0, 0.08)"
+		}
 	  }
   }));
+
+const options = [
+	"Oliver Hansen",
+	"Van Henry",
+	"April Tucker",
+	"Ralph Hubbard",
+	"Omar Alexander",
+	"Carlos Abbott",
+	"Miriam Wagner",
+	"Bradley Wilkerson",
+	"Virginia Andrews",
+	"Kelly Snyder"
+];
+
 
 const Upload = () => {
 
 	const classes = useStyles();
 
-	const [department,setDepartment] = useState("");
 	const [hashtag,setHashtag] = useState("");
 	const [files,setFiles] = useState([]);
+	const [uploaded,isUploaded] = useState(false);
+
+	const [selectedDepartment, setSelectedDepartment] = useState([]);
+  	const isAllSelectedDepartment =
+    	options.length > 0 && selectedDepartment.length === options.length;
+
+	const handleChange2 = (event) => {
+		const value = event.target.value;
+		if (value[value.length - 1] === "all") {
+		  setSelectedDepartment(
+			selectedDepartment.length === options.length ? [] : options
+		  );
+		  return;
+		}
+		setSelectedDepartment(value);
+	};
 
     const handleAdd = newFiles => {
         newFiles = newFiles.filter(file => !files.find(f => f.data === file.data));
@@ -44,9 +90,9 @@ const Upload = () => {
 	const submitHandler = (e) => {
 		e.preventDefault();
 		const uploadData = new FormData();
-		uploadData.append('document',files[0],files[0].name);
-		uploadData.append('department',"1");
-		uploadData.append('hashtags',"HASHTAG 0");
+		uploadData.append('document',files[0].file,files[0].file.name);
+		uploadData.append('department',selectedDepartment);
+		uploadData.append('hashtags',hashtag);
 
 		const url = 'http://localhost:8000/api/upload/';
 		
@@ -58,9 +104,15 @@ const Upload = () => {
 		  })
 		  .then(res => {
 			console.log(res.data);
+			isUploaded(true);
+			window.alert("Upload Successful");
 		  })
 		  .catch(err => console.log(err))	
 	}
+
+	if(uploaded){
+        return <Redirect to='/' />
+    }
 
 	return(
 		<div className="container">
@@ -72,6 +124,8 @@ const Upload = () => {
 
 				<div className="dropbox p-2">
 					<DropzoneAreaBase
+					type="file"
+					name="files"
 					fileObjects={files}
 					onAdd={handleAdd}
 					onDelete={handleDelete}
@@ -83,20 +137,44 @@ const Upload = () => {
 				<div className="ml">
 					<FormControl className={classes.formControl}>
 						<div className="mr-5">
-						<label for="dept" className="mr-3" id="dept">Department</label>
+						<label for="dept" className="mr-3" id="department">Department</label>
 						<Select
-						value={department}
+						value={selectedDepartment}
 						name="department"
-						onChange={(e) => setDepartment(e.target.value)}
-						displayEmpty
+						multiple
+						onChange={handleChange2}
+						renderValue={(department) => department.join(",")}
 						className={classes.selectEmpty}
 						>
-						<MenuItem value="">
-							<em>None</em>
+						<MenuItem
+							value="all"
+							classes={{
+								root: isAllSelectedDepartment ? classes.selectedAll : ""
+							}}
+							>
+							<ListItemIcon>
+								<Checkbox
+								classes={{ indeterminate: classes.indeterminateColor }}
+								checked={isAllSelectedDepartment}
+								indeterminate={
+									selectedDepartment.length > 0 &&
+									selectedDepartment.length < options.length
+								}
+								/>
+							</ListItemIcon>
+							<ListItemText
+								classes={{ primary: classes.selectAllText }}
+								primary="Select All"
+							/>
 						</MenuItem>
-						<MenuItem value={"dept1"}>Dept1</MenuItem>
-						<MenuItem value={"dept2"}>Dept2</MenuItem>
-						<MenuItem value={"dept3"}>Dept3</MenuItem>
+						{options.map((option) => (
+							<MenuItem key={option} value={option}>
+								<ListItemIcon>
+								<Checkbox checked={selectedDepartment.indexOf(option) > -1} />
+								</ListItemIcon>
+								<ListItemText primary={option} />
+							</MenuItem>
+						))}
 						</Select>
 						</div>
 					</FormControl>
@@ -115,9 +193,9 @@ const Upload = () => {
 						<MenuItem value="">
 							<em>None</em>
 						</MenuItem>
-						<MenuItem value={"hash1"}>hash1</MenuItem>
-						<MenuItem value={"hash2"}>hash2</MenuItem>
-						<MenuItem value={"hash3"}>hash3</MenuItem>
+						<MenuItem value={"HASHTAG 0"}>Hashtag 0</MenuItem>
+						<MenuItem value={"HASHTAG 1"}>Hashtag 1</MenuItem>
+						<MenuItem value={"HASHTAG 2"}>Hashtag 2</MenuItem>
 						</Select>
 						</div>
 					</FormControl>
