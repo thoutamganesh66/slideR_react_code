@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './home.css'
 import Group from '../assets/img/Group.png'
+import PostsApp from './PostsApp';
 
 const Home = () => (
     <div className="container-fluid home">
@@ -15,7 +16,7 @@ const Home = () => (
                     <h5>We Deliver Great Slide Designs with Better content</h5>
                     </div>
                     <div class="btn-group-vertical box">
-                    <Link to="/login" className="btn btn-dark mb-3 radius">Get Started</Link>        
+                    <Link to="/postsapp" className="btn btn-dark mb-3 radius">Get Started</Link>        
                     <Link to="/upload" className="btn btn-light radius">Upload Slides</Link>
                     </div>
                 </div>

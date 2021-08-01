@@ -14,6 +14,11 @@ import store from './store';
 import Layout from './hocs/Layout';
 import Upload from './containers/Upload';
 
+import Pagination from './containers/Pagination'
+import Posts from './containers/Posts';
+import PostsApp from './containers/PostsApp';
+
+
 const App = () => (
     <Provider store={store}>
         <Router>
@@ -26,6 +31,9 @@ const App = () => (
                     <Route exact path='/password/reset/confirm/:uid/:token' component={ResetPasswordConfirm}/>
                     <Route exact path='/activate/:uid/:token' component={Activate}/>
                     <Route exact path='/upload' component={Upload}/>
+                    <Route exact path='/pagination' component={Pagination}/>
+                    <Route exact path='posts' component={Posts}/>
+                    <Route exact path='/postsapp' component={PostsApp}/>
                 </Switch>
             </Layout>
         </Router>

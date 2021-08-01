@@ -42,18 +42,18 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const options = [
-	"Oliver Hansen",
-	"Van Henry",
-	"April Tucker",
-	"Ralph Hubbard",
-	"Omar Alexander",
-	"Carlos Abbott",
-	"Miriam Wagner",
-	"Bradley Wilkerson",
-	"Virginia Andrews",
-	"Kelly Snyder"
+	"CIVIL",
+	"CSE",
+	"MECH",
+	"MME"
 ];
 
+const options2 = [
+	"Simple",
+	"Complex",
+	"Elegant",
+	"Stylish"
+];
 
 const Upload = () => {
 
@@ -64,8 +64,12 @@ const Upload = () => {
 	const [uploaded,isUploaded] = useState(false);
 
 	const [selectedDepartment, setSelectedDepartment] = useState([]);
+	const [selectedCategory, setSelectedCategory] = useState([]);
   	const isAllSelectedDepartment =
     	options.length > 0 && selectedDepartment.length === options.length;
+
+	const isAllSelectedCategory =
+    	options2.length > 0 && selectedCategory.length === options2.length;
 
 	const handleChange2 = (event) => {
 		const value = event.target.value;
@@ -76,6 +80,17 @@ const Upload = () => {
 		  return;
 		}
 		setSelectedDepartment(value);
+	};
+
+	const handleChange3 = (event) => {
+		const value = event.target.value;
+		if (value[value.length - 1] === "all") {
+		  setSelectedCategory(
+			selectedCategory.length === options2.length ? [] : options2
+		  );
+		  return;
+		}
+		setSelectedCategory(value);
 	};
 
     const handleAdd = newFiles => {
@@ -91,8 +106,9 @@ const Upload = () => {
 		e.preventDefault();
 		const uploadData = new FormData();
 		uploadData.append('document',files[0].file,files[0].file.name);
-		uploadData.append('department',selectedDepartment);
-		uploadData.append('hashtags',hashtag);
+		uploadData.append('department',selectedDepartment.join(","));
+		uploadData.append('hashtags',selectedCategory.join(","));
+		uploadData.append('name',files[0].file.name);
 
 		const url = 'http://localhost:8000/api/upload/';
 		
@@ -181,21 +197,45 @@ const Upload = () => {
 				</div>
 				<div className="mr">
 					<FormControl className={classes.formControl}>
-						<div>
-						<label for="hashtags" className="mr-3" id="hashtags">Hashtags</label>
+						<div className="mr-5">
+						<label for="cat" className="mr-3" id="category">Category</label>
 						<Select
-						value={hashtag}
-						name="hashtags"
-						onChange={(e) => setHashtag(e.target.value)}
-						displayEmpty
+						value={selectedCategory}
+						name="category"
+						multiple
+						onChange={handleChange3}
+						renderValue={(category) => category.join(",")}
 						className={classes.selectEmpty}
 						>
-						<MenuItem value="">
-							<em>None</em>
+						<MenuItem
+							value="all"
+							classes={{
+								root: isAllSelectedCategory ? classes.selectedAll : ""
+							}}
+							>
+							<ListItemIcon>
+								<Checkbox
+								classes={{ indeterminate: classes.indeterminateColor }}
+								checked={isAllSelectedCategory}
+								indeterminate={
+									selectedCategory.length > 0 &&
+									selectedCategory.length < options2.length
+								}
+								/>
+							</ListItemIcon>
+							<ListItemText
+								classes={{ primary: classes.selectAllText }}
+								primary="Select All"
+							/>
 						</MenuItem>
-						<MenuItem value={"HASHTAG 0"}>Hashtag 0</MenuItem>
-						<MenuItem value={"HASHTAG 1"}>Hashtag 1</MenuItem>
-						<MenuItem value={"HASHTAG 2"}>Hashtag 2</MenuItem>
+						{options2.map((option) => (
+							<MenuItem key={option} value={option}>
+								<ListItemIcon>
+								<Checkbox checked={selectedCategory.indexOf(option) > -1} />
+								</ListItemIcon>
+								<ListItemText primary={option} />
+							</MenuItem>
+						))}
 						</Select>
 						</div>
 					</FormControl>
