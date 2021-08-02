@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import { Container, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 
+import axios from 'axios';
 
 const useStyles = makeStyles({
     root: {
@@ -20,12 +21,31 @@ const useStyles = makeStyles({
     },
 });
 
+var fileDownload = require('js-file-download');
+
 const Posts = ({posts,loading}) => {
     const classes = useStyles();
 
+    const [fileName,setFileName] = useState("");
+
     // download function
-    // const downloadDocument = () => {
-    // }
+    const handleDownload = () => {
+        const downloadData = new FormData();
+        downloadData.append("file_name","/documents/2.png");
+        const url = "http://localhost:8000/download/";
+
+        axios.post(url,downloadData,{
+            responseType:'blob',
+        })
+        .then(res=> {
+            fileDownload(res.data,"/documents/B171129_P.Gopi_SS_Assignment_5.pdf");
+            console.log(res);
+            console.log(fileName);
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
 
     if(loading){
         return <h2 className="text-center">Loading...</h2>
@@ -34,7 +54,7 @@ const Posts = ({posts,loading}) => {
             <>
                 <Container maxWidth="md">
                     <Grid container spacing={5} alignItems="flex-end">
-                        {posts.map((post) => {
+                        {posts.map((post) => {                                
                             return(
                                 <Grid item key={post.id} xs={12} md={4}>
                                     <Card className={classes.card}>
@@ -71,9 +91,9 @@ const Posts = ({posts,loading}) => {
                                             <Button size="small" color="primary">
                                                 View
                                             </Button>
-                                            <Link to="./media/documents/2.png" target="_blank" download className="button">
+                                            <Button size="small" color="primary" onClick={() => handleDownload()} target="_blank">
                                                 Download
-                                            </Link>
+                                            </Button>
                                         </CardActions>
                                     </Card>
                                 </Grid>
