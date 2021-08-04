@@ -16,6 +16,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
+import TextField from '@material-ui/core/TextField';
+
 const useStyles = makeStyles((theme) => ({
     submit: {
       margin: theme.spacing(3, 0, 6),
@@ -71,6 +73,10 @@ const Upload = () => {
 	const isAllSelectedCategory =
     	options2.length > 0 && selectedCategory.length === options2.length;
 
+	const onNameChange = (e) => {
+		setFileName(e.target.value);
+	}
+
 	const handleChange2 = (event) => {
 		const value = event.target.value;
 		if (value[value.length - 1] === "all") {
@@ -82,6 +88,7 @@ const Upload = () => {
 		setSelectedDepartment(value);
 	};
 
+	const [filename,setFileName]=useState("");
 	const handleChange3 = (event) => {
 		const value = event.target.value;
 		if (value[value.length - 1] === "all") {
@@ -108,7 +115,7 @@ const Upload = () => {
 		uploadData.append('document',files[0].file,files[0].file.name);
 		uploadData.append('department',selectedDepartment.join(","));
 		uploadData.append('hashtags',selectedCategory.join(","));
-		uploadData.append('name',files[0].file.name);
+		uploadData.append('name',filename);
 
 		const url = 'http://localhost:8000/api/upload/';
 		
@@ -238,8 +245,13 @@ const Upload = () => {
 						))}
 						</Select>
 						</div>
-					</FormControl>
+					</FormControl>					
 				</div>
+			</div>
+
+			<div className="text-center">
+				<label className="uploadfilename">Name:</label>
+				<TextField id="name" name="name" label="Enter name of file" value={filename} onChange={ e => onNameChange(e)}/>
 			</div>
 			<div className="center">
 				<Button

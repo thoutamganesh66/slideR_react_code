@@ -19,8 +19,12 @@ const Navbar = ({logout, isAuthenticated}) => {
     );
 
     const authLinks = () => (
-        <a href='!#' class="btn btn-light mr-2" onClick={logout_user}>Logout</a>
+        <a href='/' class="btn btn-light mr-2" onClick={logout_user}>Logout</a>
     );
+
+    if(redirect){
+        window.alert("logout successful");
+    }
 
     return(
         <>
@@ -38,7 +42,7 @@ const Navbar = ({logout, isAuthenticated}) => {
                         </div>
                     </div>
                 </nav>
-                {redirect ? <Redirect to='/home' /> : <> </>}
+                {redirect ? <Redirect to='/' /> : <> </>}
             </div>
         </>
     );

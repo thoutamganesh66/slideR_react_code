@@ -32,3 +32,8 @@
 .box{
     border-radius: 40px;
 }
+
+.uploadfilename{
+    font-size: large;
+    padding: 20px;
+}

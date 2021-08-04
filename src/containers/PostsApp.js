@@ -124,10 +124,7 @@ const PostsApp = () => {
     };
     
     return(
-        <div className="container mt-5">
-            <div className="text-center">
-                <label className="mb-3 text-center heading">SLIDES</label>
-            </div>            
+        <div className="container mt-0 mb-5">                       
             {/* display departments */}
                 <nav>
                     <div className="d-flex flex-row departments">
