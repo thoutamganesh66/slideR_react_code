@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { DropzoneAreaBase} from "material-ui-dropzone";
 import './upload.css';
 import UploadIMG from '../assets/img/UploadIMG.png'
@@ -24,10 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
 	formControl: {
 		margin: theme.spacing(1),
-		minWidth: 120,
-	  },
-	  selectEmpty: {
-		marginTop: theme.spacing(2),
+		width: 200
 	  },
 	  indeterminateColor: {
 		color: "#f50057"
@@ -43,35 +40,87 @@ const useStyles = makeStyles((theme) => ({
 	  }
   }));
 
-const options = [
-	"CIVIL",
-	"CSE",
-	"MECH",
-	"MME"
-];
+  const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250
+    }
+  },
+  getContentAnchorEl: null,
+  anchorOrigin: {
+    vertical: "bottom",
+    horizontal: "center"
+  },
+  transformOrigin: {
+    vertical: "top",
+    horizontal: "center"
+  },
+  variant: "menu"
+};
 
-const options2 = [
-	"Simple",
-	"Complex",
-	"Elegant",
-	"Stylish"
-];
 
 const Upload = () => {
-
 	const classes = useStyles();
+		const [departments,setDepartments] = useState([]);
+		const [hashtags,setHashtags] = useState([]);
+	
+		// fetching departments
+		useEffect(() => {
+			const fetchDepartments = async () => {
+			  const res = await axios.get('http://localhost:8000/api/department/');		  
+			  setDepartments(res.data);
+			  console.log("depts:",res.data);
+			};
+		
+			fetchDepartments();
+		}, []);
 
+		const options = departments.map(function(obj){
+			return obj.name;
+		});
+	
+		// fetching hashtags
+		useEffect(() => {
+			const fetchHashtags = async () => {
+			  const resp = await axios.get('http://localhost:8000/api/category/');
+			  setHashtags(resp.data);
+			for (var key in hashtags) {
+				if (hashtags.hasOwnProperty(key)) {
+					options2.push( [ hashtags[key] ] );
+				}
+			}
+			  console.log("cats:",resp.data);
+			};
+		
+			fetchHashtags();
+		}, []);
+
+		const options2 = hashtags.map(function(obj){
+			return obj.name;
+		});
+	
+	
 	const [hashtag,setHashtag] = useState("");
 	const [files,setFiles] = useState([]);
 	const [uploaded,isUploaded] = useState(false);
 
 	const [selectedDepartment, setSelectedDepartment] = useState([]);
 	const [selectedCategory, setSelectedCategory] = useState([]);
+
+
+	
+
   	const isAllSelectedDepartment =
     	options.length > 0 && selectedDepartment.length === options.length;
 
 	const isAllSelectedCategory =
     	options2.length > 0 && selectedCategory.length === options2.length;
+
+
+	
 
 	const onNameChange = (e) => {
 		setFileName(e.target.value);
@@ -156,18 +205,20 @@ const Upload = () => {
 					/>
 				</div>
 			</div>
-			<div className="d-flex flex-row">
-				<div className="ml">
+				<div className="text-center">
+				<label className="deptandhashlabel">Department:</label>
 					<FormControl className={classes.formControl}>
-						<div className="mr-5">
-						<label for="dept" className="mr-3" id="department">Department</label>
+						<InputLabel id="department">Select Department</InputLabel>
+						{/* <label for="dept" className="mr-3" id="department">Department</label> */}
 						<Select
+						labelId="department"
 						value={selectedDepartment}
 						name="department"
 						multiple
 						onChange={handleChange2}
 						renderValue={(department) => department.join(",")}
-						className={classes.selectEmpty}
+						// className={classes.selectEmpty}
+						MenuProps={MenuProps}
 						>
 						<MenuItem
 							value="all"
@@ -180,8 +231,7 @@ const Upload = () => {
 								classes={{ indeterminate: classes.indeterminateColor }}
 								checked={isAllSelectedDepartment}
 								indeterminate={
-									selectedDepartment.length > 0 &&
-									selectedDepartment.length < options.length
+									selectedDepartment.length > 0 && selectedDepartment.length < options.length
 								}
 								/>
 							</ListItemIcon>
@@ -199,20 +249,21 @@ const Upload = () => {
 							</MenuItem>
 						))}
 						</Select>
-						</div>
 					</FormControl>
 				</div>
-				<div className="mr">
+				<div className="text-center">
+				<label className="deptandhashlabel">Category:</label>
 					<FormControl className={classes.formControl}>
-						<div className="mr-5">
-						<label for="cat" className="mr-3" id="category">Category</label>
+						<InputLabel id="category">Select Category</InputLabel>
+						{/* <label for="cat" className="mr-3" id="category">Category</label> */}
 						<Select
 						value={selectedCategory}
+						labelId="category"
 						name="category"
 						multiple
 						onChange={handleChange3}
 						renderValue={(category) => category.join(",")}
-						className={classes.selectEmpty}
+						MenuProps={MenuProps}
 						>
 						<MenuItem
 							value="all"
@@ -225,8 +276,7 @@ const Upload = () => {
 								classes={{ indeterminate: classes.indeterminateColor }}
 								checked={isAllSelectedCategory}
 								indeterminate={
-									selectedCategory.length > 0 &&
-									selectedCategory.length < options2.length
+									selectedCategory.length > 0 && selectedCategory.length < options2.length
 								}
 								/>
 							</ListItemIcon>
@@ -244,10 +294,8 @@ const Upload = () => {
 							</MenuItem>
 						))}
 						</Select>
-						</div>
 					</FormControl>					
 				</div>
-			</div>
 
 			<div className="text-center">
 				<label className="uploadfilename">Name:</label>

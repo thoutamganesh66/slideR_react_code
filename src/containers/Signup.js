@@ -20,6 +20,8 @@ import { signup } from '../actions/auth';
 import './login.css'
 import axios from 'axios';
 
+import GoogleSocialAuth from './GoogleSocialAuth';
+
 function Copyright() {
     return (
       <Typography variant="body2" color="textSecondary" align="center">
@@ -349,9 +351,7 @@ const Signup = ({signup, isAuthenticated}) => {
                     </Button>
                 </form>
                 {/* Continue with google */}
-                <Button fullWidth color="secondary" variant="contained" className={classes.submit} onClick={continueWithGoogle}>
-                    Continue With Google
-                </Button>
+                <GoogleSocialAuth/>                
                 <Grid container justifyContent="flex-end">
                     <Grid item>
                         <Link to="/login" variant="body2">

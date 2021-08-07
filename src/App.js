@@ -18,6 +18,10 @@ import Pagination from './containers/Pagination'
 import Posts from './containers/Posts';
 import PostsApp from './containers/PostsApp';
 
+import Profile from './components/Profile';
+import MyUploads from './components/MyUploads';
+import Contact from './components/Contact';
+import Feedback from './components/Feedback';
 
 const App = () => (
     <Provider store={store}>
@@ -34,6 +38,10 @@ const App = () => (
                     <Route exact path='/pagination' component={Pagination}/>
                     <Route exact path='posts' component={Posts}/>
                     <Route exact path='/postsapp' component={PostsApp}/>
+                    <Route exact path='/profile' component={Profile}/>
+                    <Route exact path='/myuploads' component={MyUploads}/>
+                    <Route exact path='/contact' component={Contact}/>
+                    <Route exact path='/feedback' component={Feedback}/>
                 </Switch>
             </Layout>
         </Router>

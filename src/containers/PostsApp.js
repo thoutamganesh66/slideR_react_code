@@ -50,6 +50,8 @@ const PostsApp = () => {
         const fetchDepartments = async () => {
           const res = await axios.get('http://localhost:8000/api/department/');
           setDepartments(res.data);
+
+        //   console.log("departments:",...departments);
         };
     
         fetchDepartments();
@@ -98,7 +100,7 @@ const PostsApp = () => {
         .catch(err => console.log(err))
     };
 
-    // To display Hashtag posts
+    //To display Hashtag posts
     const displayHashtagPosts = (e) => {
         const hashtagData = new FormData();
         hashtagData.append("category",e);
@@ -122,6 +124,9 @@ const PostsApp = () => {
         )
         .catch(err => console.log(err))
     };
+
+
+   
     
     return(
         <div className="container mt-0 mb-5">                       

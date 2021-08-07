@@ -17,6 +17,7 @@ import { AccountCircle, PermIdentity, VpnKey, VpnKeyOutlined } from '@material-u
 import { login } from '../actions/auth';
 import './login.css'
 import axios from 'axios';
+import GoogleSocialAuth from './GoogleSocialAuth';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -59,14 +60,14 @@ const Login = ({login, isAuthenticated}) => {
         login(email,password);
     };
 
-    const continueWithGoogle = async() => {
-        try{
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:8000`)
-            window.location.replace(res.data.authorization_url);
-        } catch(err){
+    // const continueWithGoogle = async() => {
+    //     try{
+    //         const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:8000`)
+    //         window.location.replace(res.data.authorization_url);
+    //     } catch(err){
 
-        }
-    };
+    //     }
+    // };
 
     //is user authenticated?
     //redirect to homepage
@@ -143,9 +144,7 @@ const Login = ({login, isAuthenticated}) => {
                 </Button>
             </form>
             {/* Continue with google */}
-            <Button fullWidth color="secondary" variant="contained" className={classes.submit} onClick={continueWithGoogle}>
-                Continue With Google
-            </Button>
+            <GoogleSocialAuth/>
             <Grid container>
                 <Grid item xs>
                     <Link to="/reset-password" variant="body2">
