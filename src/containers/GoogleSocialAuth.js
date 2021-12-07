@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 import GoogleLogin from 'react-google-login';
 import googleLogin from './googleLogin';
 
-class GoogleSocialAuth extends Component {
+const GoogleSocialAuth = () => {
 
-  render() {
     const responseGoogle = async(response) => {
-      let googleResponse  = await googleLogin(response.accessToken)
-      console.log(googleResponse);
-      console.log(response);
-    }
+      	let googleResponse  = await googleLogin(response.accessToken)
+      	console.log(googleResponse);
+      	console.log(response);
+    };
+    
     return (
       <div className="App">
         <GoogleLogin
@@ -20,7 +20,6 @@ class GoogleSocialAuth extends Component {
         />
       </div>
     );
-  }
 }
 
 export default GoogleSocialAuth;

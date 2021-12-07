@@ -17,13 +17,15 @@ class Feedback extends React.Component {
     e.preventDefault();
     axios({
       method: "POST",
-      url:"http://localhost:3002/send",
-      data:  this.state
+      url:"http://localhost:8000/feedback/",
+      data:  this.state,
+      headers:{'Authorization': `JWT ${localStorage.getItem('access')}`}
     }).then((response)=>{
-      if (response.data.status === 'success') {
+      if (response.data) {
         alert("Message Sent.");
         this.resetForm()
-      } else if (response.data.status === 'fail') {
+      } 
+      else{
         alert("Message failed to send.")
       }
     })

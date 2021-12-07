@@ -14,12 +14,7 @@ paper1: {
     flexDirection: 'column',
     alignItems: 'center',
   },
-  paper2: {
-    marginTop: theme.spacing(6),
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
+  
 }));
 
 const Profile = () => {
@@ -48,7 +43,7 @@ const Profile = () => {
             <CssBaseline />
                 <div className={classes.paper1}>
             <label className="p-2 mr-3 title text-center">Profile</label>
-            <div className={classes.paper2}>
+            <div className="contain">
             <div className="text-center profilecontainer">
                 {/* <table>
                     <tr>
@@ -72,7 +67,7 @@ const Profile = () => {
                     <div className="label">
                         Last Name :
                     </div>  
-                    <div className="answer" key={profile.id}>
+                    <div className="answer" key={profile.id} >
                         {profile.last_name}
                     </div> 
                 </div>

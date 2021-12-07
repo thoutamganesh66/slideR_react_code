@@ -73,10 +73,14 @@ const Signup = ({signup, isAuthenticated}) => {
         re_password:'',
     });
 
+    const [passwordError,setPasswordError] = useState('');
+    const [successMessage,setSuccessMessage] = useState('');
+    const [rePasswordError,setRePasswordError] = useState('');
+
     const {first_name,last_name,phone,country,category,email,password,re_password} = formData;
 
     const onChange = e => setFormData({ ...formData,[e.target.name]: e.target.value});
-
+   
     const handleshoHide = ()  => {
         setShow(!show);
     }
@@ -85,28 +89,39 @@ const Signup = ({signup, isAuthenticated}) => {
         e.preventDefault();
 
         //signup function(email,password)
-        if(password!=re_password)
-        {
-            window.alert("Please check password and re-password should be same");
-        }
-        if(password.length<8){
-            window.alert("Min password length is 8 characters and should contain special char,uppercase,lowercase and a digit");
-        }
         
-        if((password == re_password) && (password.length>8)){
-            signup(first_name,last_name,phone,country,category,email,password,re_password);
-            setAccontCreated(true);
+        if(password!=='')
+        {
+            if(password==re_password)
+            {
+                setRePasswordError('');
+            }
+            else
+            {
+                setRePasswordError('Enter same password');
+            }
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if(passwordRegex.test(password))
+            {                
+                setPasswordError('');
+                signup(first_name,last_name,phone,country,category,email,password,re_password);
+                setAccontCreated(true);               
+            }
+            else
+            {
+                setPasswordError("Minimum password length is 8 and should contain lower,upper case,digit and special character");
+            }
         }
     };
 
-    const continueWithGoogle = async() => {
-        try{
-            const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:8000`)
-            window.location.replace(res.data.authorization_url);
-        } catch(err){
+    // const continueWithGoogle = async() => {
+    //     try{
+    //         const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=http://localhost:8000`)
+    //         window.location.replace(res.data.authorization_url);
+    //     } catch(err){
 
-        }
-    };
+    //     }
+    // };
 
     //is user authenticated?
     //redirect to homepage
@@ -289,7 +304,7 @@ const Signup = ({signup, isAuthenticated}) => {
                                 }}
                                 onChange={ e => onChange(e)}
                             />
-                            
+                            {passwordError && <div className="alert alert-danger">{passwordError}</div>}
                         </Grid>
                         {/* <div className="passvalidation">
                             <p id="capital" className="mt-2 mb-2">
@@ -331,7 +346,10 @@ const Signup = ({signup, isAuthenticated}) => {
                                     </InputAdornment>
                                     ),
                                 }}
-                                onChange={ e => onChange(e)}                            />
+                                onChange={ e => onChange(e)}/>
+
+{rePasswordError && <div className="alert alert-danger">{rePasswordError}</div>}
+
                         </Grid>
                         <Grid item xs={12}>
                             <FormControlLabel

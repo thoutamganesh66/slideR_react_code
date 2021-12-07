@@ -52,7 +52,8 @@ const ResetPassword = ({ reset_password }) => {
     };
 
     if (requestSent) {
-        return <Redirect to='/' />
+        // window.alert("kindly check your mail and reset the password");
+        <Redirect to='/' />
     }
 
     return(

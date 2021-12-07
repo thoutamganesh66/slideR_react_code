@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import Posts from './Posts';
-import Pagination from './Pagination';
 import axios from 'axios';
 
 import './posts.css'
 import { Button } from '@material-ui/core';
+
+import Pagination from '@material-ui/lab/Pagination';
 
 const PostsApp = () => {
     const [loading,setLoading] = useState(false);
@@ -15,12 +16,13 @@ const PostsApp = () => {
     const [departments,setDepartments] = useState([]);
     const [hashtags,setHashtags] = useState([]);
 
+    
 
     useEffect(() => {
         const fetchPosts = async () => {
             const fileData = new FormData();
-            fileData.append('page_factor',postsPerPage);
-            fileData.append('page_number',"1");
+            fileData.append('page_factor',12);
+            fileData.append('page_number',currentPage);
             fileData.append('order_by',"uploaded_at");
             setLoading(true);
 
@@ -45,6 +47,24 @@ const PostsApp = () => {
         fetchPosts();
     }, []);
 
+    //pagination
+    const pageChange = (event, value) => {
+        setCurrentPage(value);
+        indexOfLastPost = value * postsPerPage;
+        indexOfFirstPost = indexOfLastPost - postsPerPage;
+        currentPosts = posts.slice(indexOfFirstPost,indexOfLastPost);
+        setPosts(currentPosts);
+        console.log("first index",indexOfFirstPost);
+        console.log("last index", indexOfLastPost);
+    }
+
+     //Get current posts
+   let indexOfLastPost = currentPage * postsPerPage;
+   // setIndexofLastPost(currentPage * postsPerPage);
+   let indexOfFirstPost = indexOfLastPost - postsPerPage;
+   // setIndexofFirstPost(indexOfLastPost - postsPerPage);
+   let currentPosts= posts.slice(indexOfFirstPost,indexOfLastPost) ;
+
     // fetching departments
     useEffect(() => {
         const fetchDepartments = async () => {
@@ -67,19 +87,16 @@ const PostsApp = () => {
         fetchHashtags();
     }, []);
 
-    //Get current posts
-    const indexOfLastPost = currentPage * postsPerPage;
-    const indexOfFirstPost = indexOfLastPost - postsPerPage;
-    const currentPosts = posts.slice(indexOfFirstPost,indexOfLastPost);  
+   
 
     //change page
-    const paginate = pageNumber => setCurrentPage(pageNumber);
+    // const paginate = pageNumber => setCurrentPage(pageNumber);
         
     // To display Department Posts
     const displayDeparmentPosts = (e) => {
         const depData = new FormData();
         depData.append("department",e);
-        setLoading(true);
+        setLoading(true,1000);
 
         const url = 'http://localhost:8000/api/getdepartment/';
         console.log("department name = ", e);
@@ -125,8 +142,7 @@ const PostsApp = () => {
         .catch(err => console.log(err))
     };
 
-
-   
+    // const [direction,setDirection]=useState('');
     
     return(
         <div className="container mt-0 mb-5">                       
@@ -134,6 +150,7 @@ const PostsApp = () => {
                 <nav>
                     <div className="d-flex flex-row departments">
                         <label className="p-2 mr-3 title">Departments</label>
+                        
                         {departments.map((depts) => {
                             return(                                    
                                 <div className="p-2 mr-3">                                        
@@ -143,6 +160,7 @@ const PostsApp = () => {
                                 </div>
                             )
                         })}
+                        
                     </div>
                 </nav>
             {/* display hashtags */}
@@ -161,6 +179,11 @@ const PostsApp = () => {
                     </div>
                 </nav>
             <Posts posts={currentPosts} loading={loading}/>
+
+            {/* <Pagination count={2} page={currentPage} onChange={pageChange} /> */}
+
+
+
             {/* <Pagination totalPosts={posts.length} currentPage={currentPage} paginate={paginate} /> */}
         </div>
     );

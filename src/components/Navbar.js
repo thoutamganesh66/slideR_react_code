@@ -13,6 +13,8 @@ import Popper from 'popper.js';
 import { Dropdown } from 'react-bootstrap';
 // import './navbar.css';
 
+import Alert from 'react-bootstrap/Alert';
+
 
 const Navbar = ({logout, isAuthenticated}) => {
     const [redirect,setRedirect] = useState(false);

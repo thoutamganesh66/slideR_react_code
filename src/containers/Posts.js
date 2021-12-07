@@ -9,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { Container, Grid } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import LoadAnimation from './LoadAnimation';
 
 import axios from 'axios';
 
@@ -48,7 +49,7 @@ const Posts = ({posts,loading}) => {
     }
 
     if(loading){
-        return <h2 className="text-center">Loading...</h2>
+        return <LoadAnimation/>
     }
         return(
             <>
